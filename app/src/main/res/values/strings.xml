@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ProPoints Notes</string>
+    <string name="title_activity_pro_points_notes">ProPoints Notes</string>
+    <string name="pontos_de_hoje">Pontos de Hoje</string>
+    <string name="textview">TextView</string>
+    <string name="_19_12_2018">19/12/2018</string>
+    <string name="pontos_do_dia">Pontos do Dia</string>
+    <string name="pontos_restantes">pontos restantes</string>
+    <string name="_40">40</string>
+</resources>
