@@ -2,9 +2,14 @@
     <string name="app_name">ProPoints Notes</string>
     <string name="title_activity_pro_points_notes">ProPoints Notes</string>
     <string name="pontos_de_hoje">Pontos de Hoje</string>
-    <string name="textview">TextView</string>
-    <string name="_19_12_2018">19/12/2018</string>
-    <string name="pontos_do_dia">Pontos do Dia</string>
+    <string name="_19_12_2018">00/00/0000</string>
+    <string name="pontos_do_dia">Pontos do dia</string>
     <string name="pontos_restantes">pontos restantes</string>
-    <string name="_40">40</string>
+    <string name="_40">NaN</string>
+    <string name="title_activity_settings">Configurações</string>
+    <string name="settings">Settings</string>
+    <string name="cota_di_ria_de_pontos">Cota diária de pontos</string>
+    <string name="nome_do_perfil">Nome do Perfil</string>
+    <string name="calcular">CALCULAR</string>
+    <string name="action_ok" />
 </resources>

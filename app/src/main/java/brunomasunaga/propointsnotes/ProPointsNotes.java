@@ -1,14 +1,15 @@
 package brunomasunaga.propointsnotes;
 
-import android.app.AlertDialog;
-import android.database.SQLException;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,7 +17,6 @@ import java.util.GregorianCalendar;
 import brunomasunaga.propointsnotes.database.DatabaseOpenHelper;
 
 public class ProPointsNotes extends AppCompatActivity {
-
     private SQLiteDatabase connection;
     private DatabaseOpenHelper databaseOpenHelper;
 
@@ -35,14 +35,34 @@ public class ProPointsNotes extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         registrarConsumo = (FloatingActionButton) findViewById(R.id.regConsumo);
+        registrarConsumo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
+
         data = (TextView) findViewById(R.id.data);
         pontosRestantes = (TextView) findViewById(R.id.pontosRestantes);
         dataAtual = new GregorianCalendar();
         formato = new SimpleDateFormat("dd/MM/yyyy");
-        constraintLayoutPrincipal = (ConstraintLayout) findViewById(R.id.constraintLayoutPrincipal);
 
         createConnection();
         getDate();
+        getPoints();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.manu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == R.id.settings){
+            openSettings();
+        }
+        return true;
     }
 
     private void getDate(){
@@ -50,19 +70,15 @@ public class ProPointsNotes extends AppCompatActivity {
         data.setText(formato.format(dataAtual.getTime()));
     }
 
+    private void getPoints(){
+        View inflatedView = getLayoutInflater().inflate(R.layout.content_settings, null);
+        TextView cota = (TextView) inflatedView.findViewById(R.id.cotaSettings);
+        pontosRestantes.setText(cota.getText());
+    }
+
     private void createConnection(){
-        try{
-            databaseOpenHelper = new DatabaseOpenHelper(this);
-            connection = databaseOpenHelper.getWritableDatabase();
-            Snackbar.make(constraintLayoutPrincipal, "Conexão criada.", Snackbar.LENGTH_SHORT)
-                    .setAction("OK", null).show();
-        }catch (SQLException e){
-            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-            dlg.setTitle("Erro.");
-            dlg.setMessage(e.getMessage());
-            dlg.setNeutralButton("OK", null);
-            dlg.show();
-        }
+        databaseOpenHelper = new DatabaseOpenHelper(this);
+        connection = databaseOpenHelper.getWritableDatabase();
     }
 
     private void decreaseDate(int days){
@@ -70,5 +86,11 @@ public class ProPointsNotes extends AppCompatActivity {
         formato.setCalendar(dataAtual);
         data.setText(formato.format(dataAtual.getTime()));
     }
+
+    public void openSettings(){
+        Intent intent = new Intent(this, Settings.class);
+        startActivity(intent);
+    }
+
 
 }

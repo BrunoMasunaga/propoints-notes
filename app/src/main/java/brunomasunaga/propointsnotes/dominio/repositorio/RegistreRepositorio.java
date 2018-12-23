@@ -4,14 +4,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import brunomasunaga.propointsnotes.dominio.entidades.Registre;
 
 public class RegistreRepositorio {
 
     private SQLiteDatabase connection;
-
     public RegistreRepositorio(SQLiteDatabase connection){
         this.connection = connection;
     }
@@ -41,7 +39,6 @@ public class RegistreRepositorio {
     }
 
     public List<Registre> findAll(){
-
         List<Registre> registres = new ArrayList<Registre>();
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT RegID, Day, FoodID, Quantity FROM REGISTRES");
@@ -61,9 +58,8 @@ public class RegistreRepositorio {
     }
 
     public Registre findRegistre(int RegID){
-        Registre registre = new Registre();
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT * FROM CLIENTE WHERE RegID = ?");
+        sql.append("SELECT * FROM REGISTRES WHERE RegID = ?");
         String[] parameters = new String[1];
         parameters[0] = String.valueOf(RegID);
         Cursor result = connection.rawQuery(sql.toString(), parameters);
@@ -74,7 +70,7 @@ public class RegistreRepositorio {
             reg.Day = result.getString(result.getColumnIndexOrThrow("Day"));
             reg.FoodID = result.getInt(result.getColumnIndexOrThrow("FoodID"));
             reg.Quantity = result.getFloat(result.getColumnIndexOrThrow("Quantity"));
-            return registre;
+            return reg;
         }
         return null;
     }
