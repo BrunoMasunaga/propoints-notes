@@ -3,7 +3,6 @@ package brunomasunaga.propointsnotes;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,38 +14,53 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import brunomasunaga.propointsnotes.database.DatabaseOpenHelper;
+import brunomasunaga.propointsnotes.dominio.entidades.Setting;
+import brunomasunaga.propointsnotes.dominio.repositorio.SettingsRepositorio;
 
 public class ProPointsNotes extends AppCompatActivity {
     private SQLiteDatabase connection;
     private DatabaseOpenHelper databaseOpenHelper;
 
-    private ConstraintLayout constraintLayoutPrincipal;
-    private FloatingActionButton registrarConsumo;
     private TextView data;
     private TextView pontosRestantes;
     private Calendar dataAtual;
     private SimpleDateFormat formato;
+    private FloatingActionButton registrarConsumo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        registrarConsumo = (FloatingActionButton) findViewById(R.id.regConsumo);
+        registrarConsumo = findViewById(R.id.regConsumo);
+        data = findViewById(R.id.data);
+        pontosRestantes = findViewById(R.id.pontosRestantes);
+        dataAtual = new GregorianCalendar();
+        formato = new SimpleDateFormat("dd/MM/yyyy");
+
         registrarConsumo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
             }
         });
 
-        data = (TextView) findViewById(R.id.data);
-        pontosRestantes = (TextView) findViewById(R.id.pontosRestantes);
-        dataAtual = new GregorianCalendar();
-        formato = new SimpleDateFormat("dd/MM/yyyy");
-
         createConnection();
+        getDate();
+        getPoints();
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        getDate();
+        getPoints();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
         getDate();
         getPoints();
     }
@@ -62,7 +76,24 @@ public class ProPointsNotes extends AppCompatActivity {
         if (item.getItemId() == R.id.settings){
             openSettings();
         }
+        if (item.getItemId() == R.id.setDate){
+            setDate();
+        }
         return true;
+    }
+
+    public void openSettings(){
+        Intent actSettings = new Intent(this, Settings.class);
+        startActivity(actSettings);
+    }
+
+    public void setDate(){
+
+    }
+
+    private void createConnection(){
+        databaseOpenHelper = new DatabaseOpenHelper(this);
+        connection = databaseOpenHelper.getWritableDatabase();
     }
 
     private void getDate(){
@@ -71,14 +102,15 @@ public class ProPointsNotes extends AppCompatActivity {
     }
 
     private void getPoints(){
-        View inflatedView = getLayoutInflater().inflate(R.layout.content_settings, null);
-        TextView cota = (TextView) inflatedView.findViewById(R.id.cotaSettings);
-        pontosRestantes.setText(cota.getText());
-    }
-
-    private void createConnection(){
-        databaseOpenHelper = new DatabaseOpenHelper(this);
-        connection = databaseOpenHelper.getWritableDatabase();
+        SettingsRepositorio settingsRepositorio = new SettingsRepositorio(connection);
+        Setting searched = settingsRepositorio.findSettings();
+        if(searched.Quota == 0) return;
+        else{
+            pontosRestantes.setText(String.valueOf(searched.Quota));
+            pontosRestantes.setTextSize(48);
+            TextView st = findViewById(R.id.staticRestantes);
+            st.setText("pontos restantes");
+        }
     }
 
     private void decreaseDate(int days){
@@ -86,11 +118,5 @@ public class ProPointsNotes extends AppCompatActivity {
         formato.setCalendar(dataAtual);
         data.setText(formato.format(dataAtual.getTime()));
     }
-
-    public void openSettings(){
-        Intent intent = new Intent(this, Settings.class);
-        startActivity(intent);
-    }
-
 
 }

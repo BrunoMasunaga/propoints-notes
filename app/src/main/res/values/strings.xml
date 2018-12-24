@@ -4,12 +4,22 @@
     <string name="pontos_de_hoje">Pontos de Hoje</string>
     <string name="_19_12_2018">00/00/0000</string>
     <string name="pontos_do_dia">Pontos do dia</string>
-    <string name="pontos_restantes">pontos restantes</string>
-    <string name="_40">NaN</string>
+    <string name="pontos_restantes">cadastre os dados no ícone de configuração</string>
+    <string name="_40">Cota não calculada!</string>
     <string name="title_activity_settings">Configurações</string>
     <string name="settings">Settings</string>
     <string name="cota_di_ria_de_pontos">Cota diária de pontos</string>
     <string name="nome_do_perfil">Nome do Perfil</string>
     <string name="calcular">CALCULAR</string>
-    <string name="action_ok" />
+    <string name="peso_em_kg">Peso (kg)</string>
+    <string name="altura_em_cm">Altura (cm)</string>
+    <string name="digite_seu_nome">Digite seu nome</string>
+    <string name="digite_seu_peso">Digite seu peso</string>
+    <string name="digite_sua_altura">Digite sua altura</string>
+    <string name="n_o_calculada">Não calculada</string>
+    <string name="idade">Idade</string>
+    <string name="mulher">Feminino</string>
+    <string name="homem">Masculino</string>
+    <string name="g_nero">Gênero</string>
+    <string name="ltima_vez_salvo_nunca">Última vez salvo: Nunca</string>
 </resources>

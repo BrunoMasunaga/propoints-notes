@@ -15,7 +15,8 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE FOODS (FoodID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, DescriptionFood VARCHAR (0, 100) NOT NULL, UnityFood INT NOT NULL, AmountUnity DECIMAL NOT NULL, PointsUnity DECIMAL NOT NULL)");
         db.execSQL("CREATE TABLE REGISTRES (RegID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Day DATE NOT NULL, FoodID INT NOT NULL REFERENCES FOODS (FoodID), QuantityFood DECIMAL NOT NULL)");
-        db.execSQL("CREATE TABLE SETTINGS (SettingsProfile INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Quota INT NOT NULL, Name VARCHAR (100) NOT NULL)");
+        db.execSQL("CREATE TABLE SETTINGS (SettingsProfile INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Name VARCHAR (100) NOT NULL, Age INT NOT NULL, Gender INT NOT NULL, Weight DECIMAL NOT NULL, Height INT NOT NULL, Quota INT NOT NULL, DateSaved TEXT)");
+        db.execSQL("INSERT INTO SETTINGS(Name, Age, Gender, Weight, Height, Quota, DateSaved) VALUES (' ',0,0,0,0,0, null)");
     }
 
     @Override

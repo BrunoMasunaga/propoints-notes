@@ -8,5 +8,10 @@
         android:orderInCategory="100"
         android:title="@string/settings"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/setDate"
+        android:icon="@drawable/icon_date"
+        android:title="date"
+        app:showAsAction="always" />
 
 </menu>
