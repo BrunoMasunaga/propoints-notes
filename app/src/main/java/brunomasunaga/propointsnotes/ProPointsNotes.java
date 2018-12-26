@@ -26,6 +26,8 @@ public class ProPointsNotes extends AppCompatActivity {
     private Calendar dataAtual;
     private SimpleDateFormat formato;
     private FloatingActionButton registrarConsumo;
+    private FloatingActionButton abrirListaComidas;
+    private FloatingActionButton abrirCalculadora;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,8 @@ public class ProPointsNotes extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         registrarConsumo = findViewById(R.id.regConsumo);
+        abrirListaComidas = findViewById(R.id.foodList);
+        abrirCalculadora = findViewById(R.id.calculator);
         data = findViewById(R.id.data);
         pontosRestantes = findViewById(R.id.pontosRestantes);
         dataAtual = new GregorianCalendar();
@@ -43,6 +47,14 @@ public class ProPointsNotes extends AppCompatActivity {
         registrarConsumo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+            }
+        });
+
+        abrirCalculadora.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent actCalculator = new Intent(ProPointsNotes.this, Calculator.class);
+                startActivity(actCalculator);
             }
         });
 

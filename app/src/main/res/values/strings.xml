@@ -22,4 +22,16 @@
     <string name="homem">Masculino</string>
     <string name="g_nero">Gênero</string>
     <string name="ltima_vez_salvo_nunca">Última vez salvo: Nunca</string>
+    <string name="registros_do_dia">Registros do dia</string>
+    <string name="title_activity_calculator">Calculadora de pontos</string>
+    <string name="carboidratos_g">Carboidratos (g)</string>
+    <string name="prote_nas_g">Proteínas (g)</string>
+    <string name="gorduras_totais_g">Gorduras totais (g)</string>
+    <string name="fibra_alimentar_g">Fibra alimentar (g)</string>
+    <string name="propoints">ProPoints</string>
+    <string name="n_o_calculado">Não calculado</string>
+    <string name="unidade">Unidade</string>
+    <string name="quantidade">Quantidade</string>
+    <string name="_1">1</string>
+    <string name="tipo">Tipo</string>
 </resources>
