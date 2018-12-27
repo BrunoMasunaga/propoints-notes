@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import brunomasunaga.propointsnotes.ProPointsNotes;
 import brunomasunaga.propointsnotes.dominio.entidades.Registre;
 
 public class RegistreRepositorio {
@@ -18,7 +20,7 @@ public class RegistreRepositorio {
         ContentValues contentValues = new ContentValues();
         contentValues.put("Day", String.valueOf(registre.Day));
         contentValues.put("FoodID", registre.FoodID);
-        contentValues.put("Quantity", registre.Quantity);
+        contentValues.put("Quantity", registre.QuantityFood);
         connection.insertOrThrow("REGISTRES", null, contentValues);
     }
 
@@ -32,25 +34,28 @@ public class RegistreRepositorio {
         ContentValues contentValues = new ContentValues();
         contentValues.put("Day", String.valueOf(registre.Day));
         contentValues.put("FoodID", registre.FoodID);
-        contentValues.put("Quantity", registre.Quantity);
+        contentValues.put("Quantity", registre.QuantityFood);
         String[] parameters = new String[1];
         parameters[0] = String.valueOf(registre.RegID);
         connection.update("REGISTRES", contentValues, "RegID = ?", parameters);
     }
 
     public List<Registre> findAll(){
-        List<Registre> registres = new ArrayList<Registre>();
-        StringBuilder sql = new StringBuilder();
-        sql.append("SELECT RegID, Day, FoodID, Quantity FROM REGISTRES");
-        Cursor result = connection.rawQuery(sql.toString(), null);
+        List<Registre> registres = new ArrayList<>();
+        String query = "SELECT * FROM REGISTRES NATURAL JOIN FOODS";
+        Cursor result = connection.rawQuery(query, null);
         if (result.getCount() > 0) {
             result.moveToFirst();
             do {
                 Registre reg = new Registre();
                 reg.RegID = result.getInt(result.getColumnIndexOrThrow("RegID"));
                 reg.Day = result.getString(result.getColumnIndexOrThrow("Day"));
+                reg.QuantityFood = result.getFloat(result.getColumnIndexOrThrow("QuantityFood"));
                 reg.FoodID = result.getInt(result.getColumnIndexOrThrow("FoodID"));
-                reg.Quantity = result.getFloat(result.getColumnIndexOrThrow("Quantity"));
+                reg.AmountUnity = result.getInt(result.getColumnIndexOrThrow("AmountUnity"));
+                reg.UnityFood = result.getString(result.getColumnIndexOrThrow("UnityFood"));
+                reg.DescriptionFood = result.getString(result.getColumnIndexOrThrow("DescriptionFood"));
+                reg.PointsUnity = result.getInt(result.getColumnIndexOrThrow("PointsUnity"));
                 registres.add(reg);
             } while (result.moveToNext());
         }
@@ -69,7 +74,7 @@ public class RegistreRepositorio {
             reg.RegID = result.getInt(result.getColumnIndexOrThrow("RegID"));
             reg.Day = result.getString(result.getColumnIndexOrThrow("Day"));
             reg.FoodID = result.getInt(result.getColumnIndexOrThrow("FoodID"));
-            reg.Quantity = result.getFloat(result.getColumnIndexOrThrow("Quantity"));
+            reg.QuantityFood = result.getFloat(result.getColumnIndexOrThrow("QuantityFood"));
             return reg;
         }
         return null;

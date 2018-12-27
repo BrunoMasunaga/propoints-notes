@@ -26,6 +26,10 @@
         <activity
             android:name=".Calculator"
             android:label="@string/title_activity_calculator"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".AddRegistry"
+            android:label="@string/title_activity_add_registry"
             android:theme="@style/AppTheme"></activity>
     </application>
 

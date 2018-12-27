@@ -19,6 +19,7 @@ public class FoodRepositorio {
     public void insert(Food food){
         ContentValues contentValues = new ContentValues();
         contentValues.put("DescriptionFood", String.valueOf(food.DescriptionFood));
+        contentValues.put("UnityFood", String.valueOf(food.UnityFood));
         contentValues.put("AmountUnity", food.AmountUnity);
         contentValues.put("PointsUnity", food.PointsUnity);
         connection.insertOrThrow("FOODS", null, contentValues);
@@ -33,6 +34,7 @@ public class FoodRepositorio {
     public void alter(Food food){
         ContentValues contentValues = new ContentValues();
         contentValues.put("DescriptionFood", String.valueOf(food.DescriptionFood));
+        contentValues.put("UnityFood", String.valueOf(food.UnityFood));
         contentValues.put("AmountUnity", food.AmountUnity);
         contentValues.put("PointsUnity", food.PointsUnity);
         String[] parameters = new String[1];
@@ -43,7 +45,7 @@ public class FoodRepositorio {
     public List<Food> findAll(){
         List<Food> foods = new ArrayList<Food>();
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT FoodID, DescriptionFood, AmountUnity, PointsUnity FROM FOODS");
+        sql.append("SELECT FoodID, DescriptionFood, UnityFood, AmountUnity, PointsUnity FROM FOODS");
         Cursor result = connection.rawQuery(sql.toString(), null);
         if (result.getCount() > 0) {
             result.moveToFirst();
@@ -52,7 +54,8 @@ public class FoodRepositorio {
                 food.FoodID = result.getInt(result.getColumnIndexOrThrow("FoodID"));
                 food.AmountUnity = result.getFloat(result.getColumnIndexOrThrow("AmountUnity"));
                 food.DescriptionFood = result.getString(result.getColumnIndexOrThrow("DescriptionFood"));
-                food.PointsUnity = result.getFloat(result.getColumnIndexOrThrow("PointsUnity"));
+                food.UnityFood = result.getString(result.getColumnIndexOrThrow("UnityFood"));
+                food.PointsUnity = result.getInt(result.getColumnIndexOrThrow("PointsUnity"));
                 foods.add(food);
             } while (result.moveToNext());
         }
@@ -71,7 +74,8 @@ public class FoodRepositorio {
             food.FoodID = result.getInt(result.getColumnIndexOrThrow("FoodID"));
             food.AmountUnity = result.getFloat(result.getColumnIndexOrThrow("AmountUnity"));
             food.DescriptionFood = result.getString(result.getColumnIndexOrThrow("DescriptionFood"));
-            food.PointsUnity = result.getFloat(result.getColumnIndexOrThrow("PointsUnity"));
+            food.UnityFood = result.getString(result.getColumnIndexOrThrow("UnityFood"));
+            food.PointsUnity = result.getInt(result.getColumnIndexOrThrow("PointsUnity"));
             return food;
         }
         return null;

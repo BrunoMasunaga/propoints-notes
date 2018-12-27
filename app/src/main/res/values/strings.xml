@@ -3,7 +3,7 @@
     <string name="title_activity_pro_points_notes">ProPoints Notes</string>
     <string name="pontos_de_hoje">Pontos de Hoje</string>
     <string name="_19_12_2018">00/00/0000</string>
-    <string name="pontos_do_dia">Pontos do dia</string>
+    <string name="pontos_do_dia">Informações do dia</string>
     <string name="pontos_restantes">cadastre os dados no ícone de configuração</string>
     <string name="_40">Cota não calculada!</string>
     <string name="title_activity_settings">Configurações</string>
@@ -28,10 +28,15 @@
     <string name="prote_nas_g">Proteínas (g)</string>
     <string name="gorduras_totais_g">Gorduras totais (g)</string>
     <string name="fibra_alimentar_g">Fibra alimentar (g)</string>
-    <string name="propoints">ProPoints</string>
     <string name="n_o_calculado">Não calculado</string>
     <string name="unidade">Unidade</string>
     <string name="quantidade">Quantidade</string>
     <string name="_1">1</string>
     <string name="tipo">Tipo</string>
+    <string name="title_activity_add_registry">Adicionar registro</string>
+    <string name="nome_da_comida">Nome da comida</string>
+    <string name="x">x</string>
+    <string name="name">Name</string>
+    <string name="propoints">ProPoints</string>
+    <string name="registrar_para_a_data">Registrar para a data</string>
 </resources>

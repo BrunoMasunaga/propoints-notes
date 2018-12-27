@@ -5,21 +5,29 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+
 import brunomasunaga.propointsnotes.database.DatabaseOpenHelper;
+import brunomasunaga.propointsnotes.dominio.entidades.Registre;
 import brunomasunaga.propointsnotes.dominio.entidades.Setting;
+import brunomasunaga.propointsnotes.dominio.repositorio.RegistreRepositorio;
 import brunomasunaga.propointsnotes.dominio.repositorio.SettingsRepositorio;
 
 public class ProPointsNotes extends AppCompatActivity {
     private SQLiteDatabase connection;
     private DatabaseOpenHelper databaseOpenHelper;
+    private RegistreRepositorio registreRepositorio;
 
     private TextView data;
     private TextView pontosRestantes;
@@ -28,6 +36,8 @@ public class ProPointsNotes extends AppCompatActivity {
     private FloatingActionButton registrarConsumo;
     private FloatingActionButton abrirListaComidas;
     private FloatingActionButton abrirCalculadora;
+    private RecyclerView registresList;
+    private RegistreAdapter registreAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +45,7 @@ public class ProPointsNotes extends AppCompatActivity {
         setContentView(R.layout.activity_launcher);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        createConnection();
 
         registrarConsumo = findViewById(R.id.regConsumo);
         abrirListaComidas = findViewById(R.id.foodList);
@@ -43,10 +54,21 @@ public class ProPointsNotes extends AppCompatActivity {
         pontosRestantes = findViewById(R.id.pontosRestantes);
         dataAtual = new GregorianCalendar();
         formato = new SimpleDateFormat("dd/MM/yyyy");
+        registresList =  findViewById(R.id.registresList);
+        registresList.setHasFixedSize(true);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        registresList.setLayoutManager(linearLayoutManager);
+        registreRepositorio = new RegistreRepositorio(connection);
+        List<Registre> registros = registreRepositorio.findAll();
+        registreAdapter = new RegistreAdapter(registros);
+        registresList.setAdapter(registreAdapter);
 
         registrarConsumo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent actAdd = new Intent(ProPointsNotes.this, AddRegistry.class);
+                startActivity(actAdd);
             }
         });
 
@@ -58,7 +80,6 @@ public class ProPointsNotes extends AppCompatActivity {
             }
         });
 
-        createConnection();
         getDate();
         getPoints();
     }
@@ -124,11 +145,4 @@ public class ProPointsNotes extends AppCompatActivity {
             st.setText("pontos restantes");
         }
     }
-
-    private void decreaseDate(int days){
-        dataAtual.add(Calendar.DAY_OF_MONTH, -days);
-        formato.setCalendar(dataAtual);
-        data.setText(formato.format(dataAtual.getTime()));
-    }
-
 }

@@ -1,10 +1,14 @@
 package brunomasunaga.propointsnotes.dominio.entidades;
 
-import java.util.Calendar;
-
 public class Registre {
     public int RegID;
     public String Day;
+    public float QuantityFood;
+
     public int FoodID;
-    public float Quantity;
+    public String DescriptionFood;
+    public String UnityFood;
+    public float AmountUnity;
+    public int PointsUnity;
+
 }
