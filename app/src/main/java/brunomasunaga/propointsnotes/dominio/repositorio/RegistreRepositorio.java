@@ -50,11 +50,15 @@ public class RegistreRepositorio {
                 Registre reg = new Registre();
                 reg.RegID = result.getInt(result.getColumnIndexOrThrow("RegID"));
                 reg.Day = result.getString(result.getColumnIndexOrThrow("Day"));
-                reg.QuantityFood = result.getFloat(result.getColumnIndexOrThrow("QuantityFood"));
+                reg.QuantityFood = result.getDouble(result.getColumnIndexOrThrow("QuantityFood"));
                 reg.FoodID = result.getInt(result.getColumnIndexOrThrow("FoodID"));
                 reg.AmountUnity = result.getInt(result.getColumnIndexOrThrow("AmountUnity"));
                 reg.UnityFood = result.getString(result.getColumnIndexOrThrow("UnityFood"));
                 reg.DescriptionFood = result.getString(result.getColumnIndexOrThrow("DescriptionFood"));
+                reg.Carbs = result.getDouble(result.getColumnIndexOrThrow("Carbs"));
+                reg.Prots = result.getDouble(result.getColumnIndexOrThrow("Prots"));
+                reg.Fats = result.getDouble(result.getColumnIndexOrThrow("Fats"));
+                reg.Fiber = result.getDouble(result.getColumnIndexOrThrow("Fiber"));
                 reg.PointsUnity = result.getInt(result.getColumnIndexOrThrow("PointsUnity"));
                 registres.add(reg);
             } while (result.moveToNext());
@@ -74,7 +78,7 @@ public class RegistreRepositorio {
             reg.RegID = result.getInt(result.getColumnIndexOrThrow("RegID"));
             reg.Day = result.getString(result.getColumnIndexOrThrow("Day"));
             reg.FoodID = result.getInt(result.getColumnIndexOrThrow("FoodID"));
-            reg.QuantityFood = result.getFloat(result.getColumnIndexOrThrow("QuantityFood"));
+            reg.QuantityFood = result.getDouble(result.getColumnIndexOrThrow("QuantityFood"));
             return reg;
         }
         return null;

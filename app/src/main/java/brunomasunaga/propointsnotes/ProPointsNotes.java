@@ -11,7 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,6 +38,8 @@ public class ProPointsNotes extends AppCompatActivity {
     private FloatingActionButton abrirCalculadora;
     private RecyclerView registresList;
     private RegistreAdapter registreAdapter;
+    private ProgressBar quotaProgress;
+    private int sumCons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,8 @@ public class ProPointsNotes extends AppCompatActivity {
         pontosRestantes = findViewById(R.id.pontosRestantes);
         dataAtual = new GregorianCalendar();
         formato = new SimpleDateFormat("dd/MM/yyyy");
-        registresList =  findViewById(R.id.registresList);
+        quotaProgress = findViewById(R.id.quotaProgress);
+        registresList = findViewById(R.id.registresList);
         registresList.setHasFixedSize(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -63,6 +66,10 @@ public class ProPointsNotes extends AppCompatActivity {
         List<Registre> registros = registreRepositorio.findAll();
         registreAdapter = new RegistreAdapter(registros);
         registresList.setAdapter(registreAdapter);
+        sumCons = 0;
+        for(Registre r : registros){
+            sumCons = sumCons + Registre.calculatePoints(r);
+        }
 
         registrarConsumo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +84,14 @@ public class ProPointsNotes extends AppCompatActivity {
             public void onClick(View view) {
                 Intent actCalculator = new Intent(ProPointsNotes.this, Calculator.class);
                 startActivity(actCalculator);
+            }
+        });
+
+        abrirListaComidas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent actFoodList = new Intent(ProPointsNotes.this, FoodList.class);
+                startActivity(actFoodList);
             }
         });
 
@@ -139,7 +154,9 @@ public class ProPointsNotes extends AppCompatActivity {
         Setting searched = settingsRepositorio.findSettings();
         if(searched.Quota == 0) return;
         else{
-            pontosRestantes.setText(String.valueOf(searched.Quota));
+            pontosRestantes.setText(String.valueOf(searched.Quota - sumCons));
+            quotaProgress.setMax(searched.Quota);
+            quotaProgress.setProgress(Integer.parseInt(pontosRestantes.getText().toString()));
             pontosRestantes.setTextSize(48);
             TextView st = findViewById(R.id.staticRestantes);
             st.setText("pontos restantes");

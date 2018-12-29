@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import java.lang.Math;
 
+import brunomasunaga.propointsnotes.dominio.entidades.Food;
+
 public class Calculator extends AppCompatActivity {
 
     private EditText carboidratos;
@@ -46,13 +48,12 @@ public class Calculator extends AppCompatActivity {
     }
 
     public void calculatePoints(View view){
-        int calculatedPoints;
         double carbs = Double.parseDouble(carboidratos.getText().toString());
         double prots = Double.parseDouble(proteinas.getText().toString());
         double fats = Double.parseDouble(gorduras.getText().toString());
         double fiber = Double.parseDouble(fibra.getText().toString());
-        double multiplier = Double.parseDouble(quantidade.getText().toString());
-        calculatedPoints = (int) Math.max(Math.round(multiplier*(16*prots + 19*carbs + 45*fats + 5*fiber)/175), 0);
+        double mult = Double.parseDouble(quantidade.getText().toString());
+        int calculatedPoints = Food.calculatePoints(carbs, prots, fats, fiber, mult);
         pontos.setText(String.valueOf(calculatedPoints));
     }
 

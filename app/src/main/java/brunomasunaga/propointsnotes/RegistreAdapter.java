@@ -34,8 +34,8 @@ public class RegistreAdapter extends RecyclerView.Adapter<RegistreAdapter.ViewHo
             Registre registre = registros.get(i);
             holder.nomeComida.setText(registre.DescriptionFood);
             holder.dataCons.setText(registre.Day);
-            holder.unity.setText(String.valueOf(registre.AmountUnity) + " " + registre.UnityFood);
-            holder.pontos.setText(String.valueOf((int)registre.QuantityFood*registre.PointsUnity));
+            holder.unity.setText(String.valueOf("("+registre.AmountUnity) + " " + registre.UnityFood+")");
+            holder.pontos.setText(String.valueOf(Registre.calculatePoints(registre)));
             holder.quantidadeCons.setText(String.valueOf(registre.QuantityFood)+"x");
         }
     }
