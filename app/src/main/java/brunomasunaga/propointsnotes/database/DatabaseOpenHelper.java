@@ -18,10 +18,10 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 "DescriptionFood TEXT NOT NULL, " +
                 "UnityFood TEXT NOT NULL, " +
                 "AmountUnity DECIMAL NOT NULL, " +
-                "Carbs DECIMAL NOT NULL, " +
-                "Prots DECIMAL NOT NULL, " +
-                "Fats DECIMAL NOT NULL, " +
-                "Fiber DECIMAL NOT NULL," +
+                "Carbs DECIMAL, " +
+                "Prots DECIMAL, " +
+                "Fats DECIMAL, " +
+                "Fiber DECIMAL," +
                 "PointsUnity INT NOT NULL)");
 
         db.execSQL("CREATE TABLE REGISTRES " +
@@ -41,10 +41,6 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 "DateSaved TEXT)");
 
         db.execSQL("INSERT INTO SETTINGS(Name, Age, Gender, Weight, Height, Quota, DateSaved) VALUES (' ',0,0,0,0,0, null)");
-        db.execSQL("INSERT INTO FOODS(DescriptionFood, UnityFood, AmountUnity, Carbs, Prots, Fats, Fiber, PointsUnity) VALUES ('Doritos','g', 25, 1,2,3,4,4)");
-        db.execSQL("INSERT INTO FOODS(DescriptionFood, UnityFood, AmountUnity, Carbs, Prots, Fats, Fiber, PointsUnity) VALUES ('Suco de Laranja','ml', 200, 1,2,3,4,2)");
-        db.execSQL("INSERT INTO REGISTRES(Day, FoodID, QuantityFood) VALUES ('27/12/2018', 1, 4)");
-        db.execSQL("INSERT INTO REGISTRES(Day, FoodID, QuantityFood) VALUES ('27/12/2018', 2, 2.5)");
     }
 
     @Override

@@ -29,10 +29,28 @@ public class FoodRepositorio {
         connection.insertOrThrow("FOODS", null, contentValues);
     }
 
+    public void insertID(Food food){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("FoodID", food.FoodID);
+        contentValues.put("DescriptionFood", String.valueOf(food.DescriptionFood));
+        contentValues.put("UnityFood", String.valueOf(food.UnityFood));
+        contentValues.put("AmountUnity", food.AmountUnity);
+        contentValues.put("Carbs", food.Carbs);
+        contentValues.put("Prots", food.Prots);
+        contentValues.put("Fats", food.Fats);
+        contentValues.put("Fiber", food.Fiber);
+        contentValues.put("PointsUnity", food.PointsUnity);
+        connection.insertOrThrow("FOODS", null, contentValues);
+    }
+
+    public void removeAll(){
+        connection.delete("FOODS", "FoodID > 0", null);
+    }
+
     public void removeByName(String name){
         String[] parameters = new String[1];
         parameters[0] = name;
-        connection.delete("FOODS", "FoodID = ?", parameters);
+        connection.delete("FOODS", "DescriptionFood = ?", parameters);
     }
 
     public void alterByName(String name, Food newFood){

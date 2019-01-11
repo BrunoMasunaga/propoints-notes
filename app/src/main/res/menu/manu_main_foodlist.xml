@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/settings"
-        android:icon="@drawable/icon_settings"
+        android:id="@+id/uploadFoods"
+        android:icon="@drawable/icon_upload"
         android:orderInCategory="100"
-        android:title="@string/settings"
+        android:title="Upload Foods"
         app:showAsAction="always" />
 
 </menu>

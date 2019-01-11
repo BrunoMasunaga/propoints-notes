@@ -1,9 +1,12 @@
 package brunomasunaga.propointsnotes;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.text.SimpleDateFormat;
@@ -30,8 +34,10 @@ public class ProPointsNotes extends AppCompatActivity {
     private RegistreRepositorio registreRepositorio;
 
     private TextView data;
+    private TextView st;
     private TextView pontosRestantes;
     private Calendar dataAtual;
+    private Calendar dataSelect;
     private SimpleDateFormat formato;
     private FloatingActionButton registrarConsumo;
     private FloatingActionButton abrirListaComidas;
@@ -39,6 +45,9 @@ public class ProPointsNotes extends AppCompatActivity {
     private RecyclerView registresList;
     private RegistreAdapter registreAdapter;
     private ProgressBar quotaProgress;
+    private ImageButton leftArrow;
+    private ImageButton rightArrow;
+    private LinearLayoutManager linearLayoutManager;
     private int sumCons;
 
     @Override
@@ -49,33 +58,30 @@ public class ProPointsNotes extends AppCompatActivity {
         setSupportActionBar(toolbar);
         createConnection();
 
+        st = findViewById(R.id.staticRestantes);
         registrarConsumo = findViewById(R.id.regConsumo);
         abrirListaComidas = findViewById(R.id.foodList);
         abrirCalculadora = findViewById(R.id.calculator);
         data = findViewById(R.id.data);
         pontosRestantes = findViewById(R.id.pontosRestantes);
         dataAtual = new GregorianCalendar();
+        dataSelect = new GregorianCalendar();
         formato = new SimpleDateFormat("dd/MM/yyyy");
         quotaProgress = findViewById(R.id.quotaProgress);
         registresList = findViewById(R.id.registresList);
         registresList.setHasFixedSize(true);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        registresList.setLayoutManager(linearLayoutManager);
-        registreRepositorio = new RegistreRepositorio(connection);
-        List<Registre> registros = registreRepositorio.findAll();
-        registreAdapter = new RegistreAdapter(registros);
-        registresList.setAdapter(registreAdapter);
-        sumCons = 0;
-        for(Registre r : registros){
-            sumCons = sumCons + Registre.calculatePoints(r);
-        }
+        linearLayoutManager = new LinearLayoutManager(this);
+        leftArrow = findViewById(R.id.leftArrow);
+        rightArrow = findViewById(R.id.rightArrow);
+        rightArrow.setClickable(false);
 
         registrarConsumo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent actAdd = new Intent(ProPointsNotes.this, AddRegistry.class);
-                startActivity(actAdd);
+                actAdd.putExtra("DATE", data.getText().toString());
+                startActivityForResult(actAdd, 2);
+
             }
         });
 
@@ -96,21 +102,21 @@ public class ProPointsNotes extends AppCompatActivity {
         });
 
         getDate();
-        getPoints();
+        reloadConsumed();
     }
 
     @Override
     protected void onStart(){
         super.onStart();
         getDate();
-        getPoints();
+        reloadConsumed();
     }
 
     @Override
     protected void onResume(){
         super.onResume();
         getDate();
-        getPoints();
+        reloadConsumed();
     }
 
     @Override
@@ -121,22 +127,33 @@ public class ProPointsNotes extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        if (item.getItemId() == R.id.settings){
+        if (item.getItemId() == R.id.settings) {
             openSettings();
         }
-        if (item.getItemId() == R.id.setDate){
-            setDate();
-        }
         return true;
+    }
+
+    public void reloadConsumed(){
+        if (dataAtual.equals(dataSelect)){
+            rightArrow.setClickable(false);
+            int newcolor = getResources().getColor(R.color.inativy);
+            rightArrow.getDrawable().setColorFilter(newcolor, PorterDuff.Mode.SRC_ATOP);
+        }
+        registresList.setLayoutManager(linearLayoutManager);
+        registreRepositorio = new RegistreRepositorio(connection);
+        List<Registre> registros = registreRepositorio.findByDate(data.getText().toString());
+        registreAdapter = new RegistreAdapter(registros, this);
+        registresList.setAdapter(registreAdapter);
+        sumCons = 0;
+        for(Registre r : registros){
+            sumCons = sumCons + Registre.calculatePoints(r);
+        }
+        getPoints();
     }
 
     public void openSettings(){
         Intent actSettings = new Intent(this, Settings.class);
         startActivity(actSettings);
-    }
-
-    public void setDate(){
-
     }
 
     private void createConnection(){
@@ -145,8 +162,25 @@ public class ProPointsNotes extends AppCompatActivity {
     }
 
     private void getDate(){
-        formato.setCalendar(dataAtual);
-        data.setText(formato.format(dataAtual.getTime()));
+        formato.setCalendar(dataSelect);
+        data.setText(formato.format(dataSelect.getTime()));
+    }
+
+    public void increaseDate(View view){
+        dataSelect.add(Calendar.DAY_OF_MONTH, 1);
+        formato.setCalendar(dataSelect);
+        data.setText(formato.format(dataSelect.getTime()));
+        if (rightArrow.isClickable() == false) return;
+        reloadConsumed();
+    }
+    public void decreaseDate(View view){
+        dataSelect.add(Calendar.DAY_OF_MONTH, -1);
+        formato.setCalendar(dataSelect);
+        data.setText(formato.format(dataSelect.getTime()));
+        rightArrow.setClickable(true);
+        int newcolor = getResources().getColor(R.color.colorSecondary);
+        rightArrow.getDrawable().setColorFilter(newcolor, PorterDuff.Mode.SRC_ATOP);
+        reloadConsumed();
     }
 
     private void getPoints(){
@@ -154,12 +188,27 @@ public class ProPointsNotes extends AppCompatActivity {
         Setting searched = settingsRepositorio.findSettings();
         if(searched.Quota == 0) return;
         else{
-            pontosRestantes.setText(String.valueOf(searched.Quota - sumCons));
+            int rest = searched.Quota - sumCons;
+            if (rest >= 0){
+                pontosRestantes.setText(String.valueOf(rest));
+                st.setText("pontos restantes");
+                quotaProgress.setProgress(rest);
+                pontosRestantes.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                st.setTextColor(ContextCompat.getColor(this, R.color.defaultColor));
+                if(rest == 0){
+                    pontosRestantes.setTextColor(ContextCompat.getColor(this, R.color.error));
+                    st.setTextColor(ContextCompat.getColor(this, R.color.error));
+                }
+            }
+            else{
+                pontosRestantes.setText(String.valueOf(-rest));
+                st.setText("pontos ultrapassados");
+                quotaProgress.setProgress(0);
+                pontosRestantes.setTextColor(ContextCompat.getColor(this, R.color.error));
+                st.setTextColor(ContextCompat.getColor(this, R.color.error));
+            }
             quotaProgress.setMax(searched.Quota);
-            quotaProgress.setProgress(Integer.parseInt(pontosRestantes.getText().toString()));
             pontosRestantes.setTextSize(48);
-            TextView st = findViewById(R.id.staticRestantes);
-            st.setText("pontos restantes");
         }
     }
 }

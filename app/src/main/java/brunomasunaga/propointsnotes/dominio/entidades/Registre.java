@@ -1,9 +1,10 @@
 package brunomasunaga.propointsnotes.dominio.entidades;
 
-public class Registre {
+import java.io.Serializable;
+
+public class Registre implements Serializable {
     public int RegID;
     public String Day;
-    public String Hour;
     public double QuantityFood;
 
     public int FoodID;
@@ -17,6 +18,7 @@ public class Registre {
     public int PointsUnity;
 
     public static int calculatePoints(Registre reg){
-        return Food.calculatePoints(reg.Carbs, reg.Prots, reg.Fats, reg.Fiber, reg.QuantityFood);
+        if (reg.Carbs == -1) return Food.calculatePointsNoInfo(reg.PointsUnity, reg.QuantityFood);
+        return Food.calculatePointsInfo(reg.Carbs, reg.Prots, reg.Fats, reg.Fiber, reg.QuantityFood);
     }
 }

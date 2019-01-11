@@ -20,8 +20,12 @@ public class RegistreRepositorio {
         ContentValues contentValues = new ContentValues();
         contentValues.put("Day", String.valueOf(registre.Day));
         contentValues.put("FoodID", registre.FoodID);
-        contentValues.put("Quantity", registre.QuantityFood);
+        contentValues.put("QuantityFood", registre.QuantityFood);
         connection.insertOrThrow("REGISTRES", null, contentValues);
+    }
+
+    public void removeAll(){
+        connection.delete("REGISTRES", "RegID > 0", null);
     }
 
     public void remove(int RegID){
@@ -30,11 +34,11 @@ public class RegistreRepositorio {
         connection.delete("REGISTRES", "RegID = ?", parameters);
     }
 
-    public void alter(Registre registre){
+    public void alterByID(Registre registre){
         ContentValues contentValues = new ContentValues();
         contentValues.put("Day", String.valueOf(registre.Day));
         contentValues.put("FoodID", registre.FoodID);
-        contentValues.put("Quantity", registre.QuantityFood);
+        contentValues.put("QuantityFood", registre.QuantityFood);
         String[] parameters = new String[1];
         parameters[0] = String.valueOf(registre.RegID);
         connection.update("REGISTRES", contentValues, "RegID = ?", parameters);
@@ -42,7 +46,25 @@ public class RegistreRepositorio {
 
     public List<Registre> findAll(){
         List<Registre> registres = new ArrayList<>();
-        String query = "SELECT * FROM REGISTRES NATURAL JOIN FOODS";
+        String query = "SELECT * FROM REGISTRES";
+        Cursor result = connection.rawQuery(query, null);
+        if (result.getCount() > 0) {
+            result.moveToFirst();
+            do {
+                Registre reg = new Registre();
+                reg.RegID = result.getInt(result.getColumnIndexOrThrow("RegID"));
+                reg.Day = result.getString(result.getColumnIndexOrThrow("Day"));
+                reg.QuantityFood = result.getDouble(result.getColumnIndexOrThrow("QuantityFood"));
+                reg.FoodID = result.getInt(result.getColumnIndexOrThrow("FoodID"));
+                registres.add(reg);
+            } while (result.moveToNext());
+        }
+        return registres;
+    }
+
+    public List<Registre> findByDate(String day){
+        List<Registre> registres = new ArrayList<>();
+        String query = "SELECT * FROM REGISTRES NATURAL JOIN FOODS WHERE Day = '" + day+"'";
         Cursor result = connection.rawQuery(query, null);
         if (result.getCount() > 0) {
             result.moveToFirst();
