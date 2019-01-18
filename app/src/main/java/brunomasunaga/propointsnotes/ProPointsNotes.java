@@ -33,6 +33,14 @@ public class ProPointsNotes extends AppCompatActivity {
     private DatabaseOpenHelper databaseOpenHelper;
     private RegistreRepositorio registreRepositorio;
 
+    private TextView quota;
+    private TextView consumed;
+    private TextView stQuota;
+    private TextView stConsumed;
+    private boolean notSetted;
+
+    private TextView noRegistry;
+
     private TextView data;
     private TextView st;
     private TextView pontosRestantes;
@@ -48,6 +56,7 @@ public class ProPointsNotes extends AppCompatActivity {
     private ImageButton leftArrow;
     private ImageButton rightArrow;
     private LinearLayoutManager linearLayoutManager;
+    private SimpleDateFormat hourFormat;
     private int sumCons;
 
     @Override
@@ -58,6 +67,14 @@ public class ProPointsNotes extends AppCompatActivity {
         setSupportActionBar(toolbar);
         createConnection();
 
+        quota = findViewById(R.id.dayQuota);
+        consumed = findViewById(R.id.ptsConsumidos);
+        stQuota = findViewById(R.id.st_quota);
+        stConsumed = findViewById(R.id.st_pontosConsumidos);
+        notSetted = true;
+
+        noRegistry = findViewById(R.id.st_noRegistry);
+
         st = findViewById(R.id.staticRestantes);
         registrarConsumo = findViewById(R.id.regConsumo);
         abrirListaComidas = findViewById(R.id.foodList);
@@ -67,19 +84,25 @@ public class ProPointsNotes extends AppCompatActivity {
         dataAtual = new GregorianCalendar();
         dataSelect = new GregorianCalendar();
         formato = new SimpleDateFormat("dd/MM/yyyy");
+        hourFormat = new SimpleDateFormat("HH:mm");
         quotaProgress = findViewById(R.id.quotaProgress);
         registresList = findViewById(R.id.registresList);
         registresList.setHasFixedSize(true);
         linearLayoutManager = new LinearLayoutManager(this);
         leftArrow = findViewById(R.id.leftArrow);
         rightArrow = findViewById(R.id.rightArrow);
-        rightArrow.setClickable(false);
 
         registrarConsumo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent actAdd = new Intent(ProPointsNotes.this, AddRegistry.class);
-                actAdd.putExtra("DATE", data.getText().toString());
+                String[] date = new String[2];
+                date[0] = data.getText().toString();
+                if (dataSelect.equals(dataAtual)){
+                    date[1] = hourFormat.format(dataSelect.getTime());
+                }
+                else date[1] = null;
+                actAdd.putExtra("DATE", date);
                 startActivityForResult(actAdd, 2);
 
             }
@@ -134,14 +157,21 @@ public class ProPointsNotes extends AppCompatActivity {
     }
 
     public void reloadConsumed(){
-        if (dataAtual.equals(dataSelect)){
+        if (dataSelect.equals(dataAtual)){
             rightArrow.setClickable(false);
             int newcolor = getResources().getColor(R.color.inativy);
             rightArrow.getDrawable().setColorFilter(newcolor, PorterDuff.Mode.SRC_ATOP);
         }
+        if (compareStartLimit()){
+            leftArrow.setClickable(false);
+            int newcolor = getResources().getColor(R.color.inativy);
+            leftArrow.getDrawable().setColorFilter(newcolor, PorterDuff.Mode.SRC_ATOP);
+        }
         registresList.setLayoutManager(linearLayoutManager);
         registreRepositorio = new RegistreRepositorio(connection);
         List<Registre> registros = registreRepositorio.findByDate(data.getText().toString());
+        if (registros.size() == 0) noRegistry.setVisibility(View.VISIBLE);
+        else noRegistry.setVisibility(View.GONE);
         registreAdapter = new RegistreAdapter(registros, this);
         registresList.setAdapter(registreAdapter);
         sumCons = 0;
@@ -167,13 +197,17 @@ public class ProPointsNotes extends AppCompatActivity {
     }
 
     public void increaseDate(View view){
+        if (rightArrow.isClickable() == false) return;
         dataSelect.add(Calendar.DAY_OF_MONTH, 1);
         formato.setCalendar(dataSelect);
         data.setText(formato.format(dataSelect.getTime()));
-        if (rightArrow.isClickable() == false) return;
+        leftArrow.setClickable(true);
+        int newcolor = getResources().getColor(R.color.colorSecondary);
+        leftArrow.getDrawable().setColorFilter(newcolor, PorterDuff.Mode.SRC_ATOP);
         reloadConsumed();
     }
     public void decreaseDate(View view){
+        if (leftArrow.isClickable() == false) return;
         dataSelect.add(Calendar.DAY_OF_MONTH, -1);
         formato.setCalendar(dataSelect);
         data.setText(formato.format(dataSelect.getTime()));
@@ -186,9 +220,21 @@ public class ProPointsNotes extends AppCompatActivity {
     private void getPoints(){
         SettingsRepositorio settingsRepositorio = new SettingsRepositorio(connection);
         Setting searched = settingsRepositorio.findSettings();
-        if(searched.Quota == 0) return;
+        if(searched.Quota == 0){
+            notSetted = true;
+            return;
+        }
+        if(notSetted){
+            quota.setVisibility(View.VISIBLE);
+            consumed.setVisibility(View.VISIBLE);
+            stQuota.setVisibility(View.VISIBLE);
+            stConsumed.setVisibility(View.VISIBLE);
+            notSetted = false;
+        }
         else{
             int rest = searched.Quota - sumCons;
+            quota.setText(String.valueOf(searched.Quota));
+            consumed.setText(String.valueOf(sumCons));
             if (rest >= 0){
                 pontosRestantes.setText(String.valueOf(rest));
                 st.setText("pontos restantes");
@@ -210,5 +256,12 @@ public class ProPointsNotes extends AppCompatActivity {
             quotaProgress.setMax(searched.Quota);
             pontosRestantes.setTextSize(48);
         }
+    }
+
+    private boolean compareStartLimit(){
+        formato.setCalendar(dataSelect);
+        String select = formato.format(dataSelect.getTime());
+        if (select.equals("01/01/2019")) return true;
+        return false;
     }
 }

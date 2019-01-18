@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import brunomasunaga.propointsnotes.database.DatabaseOpenHelper;
@@ -33,6 +35,9 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolderFood
     private SQLiteDatabase connection;
     private DatabaseOpenHelper databaseOpenHelper;
     private Context ct;
+    private Calendar dataAtual;
+    private SimpleDateFormat formato;
+    private SimpleDateFormat formatoHour;
 
     public FoodAdapter(List<Food> foods, Context context){
         this.foods = foods;
@@ -58,38 +63,19 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolderFood
         if (foods != null && foods.size() > 0) {
             Food food = foods.get(i);
             holder.nomeComida.setText(food.DescriptionFood);
-            if(Calculator.verifyInteger(food.AmountUnity)){
-                int q = (int) food.AmountUnity;
-                holder.unity.setText(String.valueOf("("+q) + " " + food.UnityFood+")");
-            }
-            else holder.unity.setText(String.valueOf("("+food.AmountUnity) + " " + food.UnityFood+")");
+            String amount = Calculator.integerIfPossible(food.AmountUnity);
+            holder.unity.setText("("+ amount + " " + food.UnityFood+")");
             holder.pontos.setText(String.valueOf(food.PointsUnity));
             if(food.Carbs == -1) holder.info.setText("Sem informações nutricionais");
             else{
                 String information = "Carb: ";
-                if(Calculator.verifyInteger(food.Carbs)){
-                    int q = (int) food.Carbs;
-                    information = information + q;
-                }
-                else information = information + food.Carbs;
+                information = information + Calculator.integerIfPossible(food.Carbs);
                 information = information + " g | Prot: ";
-                if(Calculator.verifyInteger(food.Prots)){
-                    int q = (int) food.Prots;
-                    information = information + q;
-                }
-                else information = information + food.Prots;
+                information = information + Calculator.integerIfPossible(food.Prots);
                 information = information + " g | Gord: ";
-                if(Calculator.verifyInteger(food.Fats)){
-                    int q = (int) food.Fats;
-                    information = information + q;
-                }
-                else information = information + food.Fats;
+                information = information + Calculator.integerIfPossible(food.Fats);
                 information = information + " g | Fib: ";
-                if(Calculator.verifyInteger(food.Fiber)){
-                    int q = (int) food.Fiber;
-                    information = information + q;
-                }
-                else information = information + food.Fiber;
+                information = information + Calculator.integerIfPossible(food.Fiber);
                 information = information + " g";
                 holder.info.setText(information);
             }
@@ -120,6 +106,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolderFood
                     if(foods.size() == 0) return true;
                     createConnection(context);
                     foodRepositorio = new FoodRepositorio(connection);
+                    Food food = foods.get(getLayoutPosition());
                     remove = false;
                     final Handler handler = new Handler() {
                         @Override
@@ -128,7 +115,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolderFood
                         }
                     };
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("Modificar ou excluir?");
+                    builder.setTitle(food.DescriptionFood);
                     builder.setMessage("Deseja modificar ou excluir o alimento selecionado?");
                     builder.setPositiveButton("Modificar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -151,13 +138,21 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolderFood
                         }
                     }
                     else{
-                        Food food = foods.get(getLayoutPosition());
                         Intent actAddFood = new Intent(context, AddFood.class);
                         actAddFood.putExtra("FOOD", food);
                         ((AppCompatActivity) context).startActivityForResult(actAddFood, 0);
                         ((AppCompatActivity) context).finish();
                     }
                     return true;
+                }
+            });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Food food = foods.get(getLayoutPosition());
+                    Intent actAddRegistry = new Intent(context, AddRegistry.class);
+                    actAddRegistry.putExtra("NAMEFOOD", food.DescriptionFood);
+                    ((AppCompatActivity) context).startActivityForResult(actAddRegistry, 0);
                 }
             });
         }

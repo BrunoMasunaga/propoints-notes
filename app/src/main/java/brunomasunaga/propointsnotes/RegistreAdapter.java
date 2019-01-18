@@ -1,11 +1,9 @@
 package brunomasunaga.propointsnotes;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.icu.util.IslamicCalendar;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -21,9 +19,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import brunomasunaga.propointsnotes.database.DatabaseOpenHelper;
-import brunomasunaga.propointsnotes.dominio.entidades.Food;
 import brunomasunaga.propointsnotes.dominio.entidades.Registre;
-import brunomasunaga.propointsnotes.dominio.repositorio.FoodRepositorio;
 import brunomasunaga.propointsnotes.dominio.repositorio.RegistreRepositorio;
 
 public class RegistreAdapter extends RecyclerView.Adapter<RegistreAdapter.ViewHolderRegistre> {
@@ -60,19 +56,11 @@ public class RegistreAdapter extends RecyclerView.Adapter<RegistreAdapter.ViewHo
         if (registros != null && registros.size() > 0) {
             Registre registre = registros.get(i);
             holder.nomeComida.setText(registre.DescriptionFood);
-            holder.dataCons.setText(registre.Day);
-            if(Calculator.verifyInteger(registre.AmountUnity)){
-                int q = (int) registre.AmountUnity;
-                holder.unity.setText(String.valueOf("("+q) + " " + registre.UnityFood+")");
-            }
-            else holder.unity.setText(String.valueOf("("+registre.AmountUnity) + " " + registre.UnityFood+")");
-
+            if (registre.Hour == null) holder.hourCons.setText("Sem registro de horário");
+            else holder.hourCons.setText(registre.Hour);
+            double q = registre.AmountUnity*registre.QuantityFood;
+            holder.quantidadeCons.setText(Calculator.integerIfPossible(q) + " " + registre.UnityFood + " - ");
             holder.pontos.setText(String.valueOf(Registre.calculatePoints(registre)));
-            if(Calculator.verifyInteger(registre.QuantityFood)){
-                int q = (int) registre.QuantityFood;
-                holder.quantidadeCons.setText(String.valueOf(q)+"x");
-            }
-            else holder.quantidadeCons.setText(String.valueOf(registre.QuantityFood)+"x");
         }
     }
 
@@ -85,16 +73,14 @@ public class RegistreAdapter extends RecyclerView.Adapter<RegistreAdapter.ViewHo
 
         public TextView nomeComida;
         public TextView pontos;
-        public TextView unity;
         public TextView quantidadeCons;
-        public TextView dataCons;
+        public TextView hourCons;
 
         public ViewHolderRegistre(@NonNull View itemView, final Context context) {
             super(itemView);
             nomeComida = itemView.findViewById(R.id.nomeComida);
             pontos = itemView.findViewById(R.id.points);
-            unity = itemView.findViewById(R.id.unity);
-            dataCons = itemView.findViewById(R.id.dataCons);
+            hourCons = itemView.findViewById(R.id.hourCons);
             quantidadeCons = itemView.findViewById(R.id.quantidadeCons);
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override

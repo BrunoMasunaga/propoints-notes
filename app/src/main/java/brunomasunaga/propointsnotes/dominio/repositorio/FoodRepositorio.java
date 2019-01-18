@@ -53,19 +53,19 @@ public class FoodRepositorio {
         connection.delete("FOODS", "DescriptionFood = ?", parameters);
     }
 
-    public void alterByName(String name, Food newFood){
+    public void alter(Food food){
         ContentValues contentValues = new ContentValues();
-        contentValues.put("DescriptionFood", String.valueOf(newFood.DescriptionFood));
-        contentValues.put("UnityFood", String.valueOf(newFood.UnityFood));
-        contentValues.put("AmountUnity", newFood.AmountUnity);
-        contentValues.put("Carbs", newFood.Carbs);
-        contentValues.put("Prots", newFood.Prots);
-        contentValues.put("Fats", newFood.Fats);
-        contentValues.put("Fiber", newFood.Fiber);
-        contentValues.put("PointsUnity", newFood.PointsUnity);
+        contentValues.put("DescriptionFood", String.valueOf(food.DescriptionFood));
+        contentValues.put("UnityFood", String.valueOf(food.UnityFood));
+        contentValues.put("AmountUnity", food.AmountUnity);
+        contentValues.put("Carbs", food.Carbs);
+        contentValues.put("Prots", food.Prots);
+        contentValues.put("Fats", food.Fats);
+        contentValues.put("Fiber", food.Fiber);
+        contentValues.put("PointsUnity", food.PointsUnity);
         String[] parameters = new String[1];
-        parameters[0] = name;
-        connection.update("FOODS", contentValues, "DescriptionFood = ?", parameters);
+        parameters[0] = String.valueOf(food.FoodID);
+        connection.update("FOODS", contentValues, "FoodID = ?", parameters);
     }
 
     public List<Food> findAll(){

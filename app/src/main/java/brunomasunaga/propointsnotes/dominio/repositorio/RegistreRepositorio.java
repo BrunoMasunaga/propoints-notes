@@ -19,6 +19,7 @@ public class RegistreRepositorio {
     public void insert(Registre registre){
         ContentValues contentValues = new ContentValues();
         contentValues.put("Day", String.valueOf(registre.Day));
+        contentValues.put("Hour", registre.Hour);
         contentValues.put("FoodID", registre.FoodID);
         contentValues.put("QuantityFood", registre.QuantityFood);
         connection.insertOrThrow("REGISTRES", null, contentValues);
@@ -54,6 +55,7 @@ public class RegistreRepositorio {
                 Registre reg = new Registre();
                 reg.RegID = result.getInt(result.getColumnIndexOrThrow("RegID"));
                 reg.Day = result.getString(result.getColumnIndexOrThrow("Day"));
+                reg.Hour = result.getString(result.getColumnIndexOrThrow("Hour"));
                 reg.QuantityFood = result.getDouble(result.getColumnIndexOrThrow("QuantityFood"));
                 reg.FoodID = result.getInt(result.getColumnIndexOrThrow("FoodID"));
                 registres.add(reg);
@@ -72,6 +74,7 @@ public class RegistreRepositorio {
                 Registre reg = new Registre();
                 reg.RegID = result.getInt(result.getColumnIndexOrThrow("RegID"));
                 reg.Day = result.getString(result.getColumnIndexOrThrow("Day"));
+                reg.Hour = result.getString(result.getColumnIndexOrThrow("Hour"));
                 reg.QuantityFood = result.getDouble(result.getColumnIndexOrThrow("QuantityFood"));
                 reg.FoodID = result.getInt(result.getColumnIndexOrThrow("FoodID"));
                 reg.AmountUnity = result.getInt(result.getColumnIndexOrThrow("AmountUnity"));
@@ -99,6 +102,7 @@ public class RegistreRepositorio {
             Registre reg = new Registre();
             reg.RegID = result.getInt(result.getColumnIndexOrThrow("RegID"));
             reg.Day = result.getString(result.getColumnIndexOrThrow("Day"));
+            reg.Hour = result.getString(result.getColumnIndexOrThrow("Hour"));
             reg.FoodID = result.getInt(result.getColumnIndexOrThrow("FoodID"));
             reg.QuantityFood = result.getDouble(result.getColumnIndexOrThrow("QuantityFood"));
             return reg;

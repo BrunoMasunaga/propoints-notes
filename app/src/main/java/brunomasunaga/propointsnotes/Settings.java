@@ -226,9 +226,9 @@ public class Settings extends AppCompatActivity {
         List<Registre> registres = registreRepositorio.findAll();
         StringBuilder registreList = new StringBuilder();
         for (Registre registre : registres){
-            registreList.append(registre.RegID);
-            registreList.append(',');
             registreList.append(registre.Day);
+            registreList.append(',');
+            registreList.append(registre.Hour);
             registreList.append(',');
             registreList.append(registre.FoodID);
             registreList.append(',');
@@ -346,8 +346,9 @@ public class Settings extends AppCompatActivity {
             String[] data = line.split(",");
             Registre newRegistre = new Registre();
             newRegistre.Day = data[0];
-            newRegistre.FoodID = Integer.parseInt(data[1]);
-            newRegistre.QuantityFood = Double.parseDouble(data[2]);
+            newRegistre.Hour = data[1];
+            newRegistre.FoodID = Integer.parseInt(data[2]);
+            newRegistre.QuantityFood = Double.parseDouble(data[3]);
             registreRepositorio.insert(newRegistre);
         }
     }

@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Registre implements Serializable {
     public int RegID;
     public String Day;
+    public String Hour;
     public double QuantityFood;
 
     public int FoodID;

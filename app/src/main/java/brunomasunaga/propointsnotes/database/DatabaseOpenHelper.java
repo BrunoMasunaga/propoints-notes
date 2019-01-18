@@ -27,6 +27,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE REGISTRES " +
                 "(RegID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "Day DATE NOT NULL, " +
+                "Hour TEXT, " +
                 "FoodID INT NOT NULL REFERENCES FOODS (FoodID), " +
                 "QuantityFood DECIMAL NOT NULL)");
 

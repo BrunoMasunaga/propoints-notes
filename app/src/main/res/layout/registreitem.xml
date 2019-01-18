@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:fontFamily="sans-serif-condensed"
-            android:text="8 x"
+            android:text="1 item - "
             android:textColor="@color/colorAccent"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -27,7 +27,6 @@
             android:id="@+id/nomeComida"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:fontFamily="sans-serif-condensed"
             android:text="Banana"
             android:textSize="18sp"
@@ -36,7 +35,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/dataCons"
+            android:id="@+id/hourCons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -46,18 +45,6 @@
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nomeComida" />
-
-        <TextView
-            android:id="@+id/unity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:fontFamily="sans-serif-condensed"
-            android:text="(1 item)"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/nomeComida"
-            app:layout_constraintStart_toEndOf="@+id/nomeComida"
-            app:layout_constraintTop_toTopOf="@+id/nomeComida" />
 
         <TextView
             android:id="@+id/points"
@@ -70,7 +57,7 @@
             android:textColor="@color/colorAccent"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/dataCons"
+            app:layout_constraintBottom_toBottomOf="@+id/hourCons"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -84,7 +71,7 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dataCons" />
+            app:layout_constraintTop_toBottomOf="@+id/hourCons" />
 
     </android.support.constraint.ConstraintLayout>
 

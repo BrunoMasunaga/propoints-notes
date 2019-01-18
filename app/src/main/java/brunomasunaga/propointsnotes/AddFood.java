@@ -44,6 +44,9 @@ public class AddFood extends AppCompatActivity {
     private CheckBox noInformation;
     private ConstraintLayout coordinator;
 
+    private Food foodCameFromList;
+    private boolean cameFromList;
+
     private CardView cardCarbs;
     private CardView cardProts;
     private CardView cardFats;
@@ -62,6 +65,7 @@ public class AddFood extends AppCompatActivity {
         coordinator = findViewById(R.id.coordinator);
         noInfo = false;
         cameFromRegistre = false;
+        cameFromList = false;
         cardCarbs = findViewById(R.id.cardCarbs);
         cardProts = findViewById(R.id.cardProteins);
         cardFats = findViewById(R.id.cardFats);
@@ -127,28 +131,38 @@ public class AddFood extends AppCompatActivity {
     private void loadFood(){
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.containsKey("FOOD")){
-            Food food = (Food) bundle.getSerializable("FOOD");
-            foodName.setText(food.DescriptionFood);
-            if(Calculator.verifyInteger(food.AmountUnity)){
-                int q = (int) food.AmountUnity;
-                qtUnity.setText(String.valueOf(q));
-            }
-            else qtUnity.setText(String.valueOf(food.AmountUnity));
-            tpUnity.setText(food.UnityFood);
-            if(food.Carbs == -1){
-                points.setText(String.valueOf(food.PointsUnity));
+            setTitle("Modificar alimento");
+            foodCameFromList = (Food) bundle.getSerializable("FOOD");
+            foodName.setText(foodCameFromList.DescriptionFood);
+            qtUnity.setText(Calculator.integerIfPossible(foodCameFromList.AmountUnity));
+            tpUnity.setText(foodCameFromList.UnityFood);
+            if(foodCameFromList.Carbs == -1){
+                points.setText(String.valueOf(foodCameFromList.PointsUnity));
                 noInformation.setChecked(true);
             }
             else {
-                carbs.setText(String.valueOf(food.Carbs));
-                prots.setText(String.valueOf(food.Prots));
-                fats.setText(String.valueOf(food.Fats));
-                fiber.setText(String.valueOf(food.Fiber));
+                carbs.setText(Calculator.integerIfPossible(foodCameFromList.Carbs));
+                prots.setText(Calculator.integerIfPossible(foodCameFromList.Prots));
+                fats.setText(Calculator.integerIfPossible(foodCameFromList.Fats));
+                fiber.setText(Calculator.integerIfPossible(foodCameFromList.Fiber));
                 noInformation.setChecked(false);
             }
+            cameFromList = true;
             return;
         }
-        if(bundle != null && bundle.containsKey("NAMEFOOD")){
+        if (bundle != null && bundle.containsKey("FCALC")){
+            foodCameFromList = (Food) bundle.getSerializable("FCALC");
+            qtUnity.setText((Calculator.integerIfPossible(foodCameFromList.AmountUnity)));
+            tpUnity.setText(foodCameFromList.UnityFood);
+            carbs.setText(Calculator.integerIfPossible(foodCameFromList.Carbs));
+            prots.setText(Calculator.integerIfPossible(foodCameFromList.Prots));
+            fats.setText(Calculator.integerIfPossible(foodCameFromList.Fats));
+            fiber.setText(Calculator.integerIfPossible(foodCameFromList.Fiber));
+            noInformation.setChecked(false);
+            cameFromList = true;
+            return;
+        }
+        if (bundle != null && bundle.containsKey("FOOD")){
             String name = (String) bundle.getSerializable("NAMEFOOD");
             foodName.setText(name);
             cameFromRegistre = true;
@@ -156,9 +170,10 @@ public class AddFood extends AppCompatActivity {
     }
 
     public boolean insertFood(String name){
-        boolean alreadyExist = (foodRepositorio.findFoodByName(name) != null);
+        Food searched = foodRepositorio.findFoodByName(name);
+        boolean alreadyExist = (searched != null);
         allowOver = false;
-        if(alreadyExist){
+        if(alreadyExist && cameFromList == false){
             final Handler handler = new Handler() {
                 @Override
                 public void handleMessage(Message mesg) {
@@ -202,7 +217,19 @@ public class AddFood extends AppCompatActivity {
             food.Fiber = -1;
             food.PointsUnity = Integer.parseInt(points.getText().toString());
         }
-        if(alreadyExist) foodRepositorio.alterByName(name, food);
+        if(cameFromList){
+            food.FoodID = foodCameFromList.FoodID;
+            if (alreadyExist && food.FoodID != searched.FoodID){
+                Snackbar snackbar = Snackbar.make(coordinator, "O nome inserido já existe no banco.", Snackbar.LENGTH_SHORT);
+                snackbar.show();
+                return false;
+            }
+            foodRepositorio.alter(food);
+        }
+        else if(alreadyExist){
+            food.FoodID = searched.FoodID;
+            foodRepositorio.alter(food);
+        }
         else foodRepositorio.insert(food);
         return true;
     }

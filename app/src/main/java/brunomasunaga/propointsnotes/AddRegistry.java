@@ -37,6 +37,7 @@ public class AddRegistry extends AppCompatActivity {
     private Calendar dataAtual;
     private EditText quantity;
     private SimpleDateFormat formato;
+    private SimpleDateFormat hourFormat;
     private ImageButton searchFood;
     private FoodRepositorio foodRepositorio;
     private RegistreRepositorio registreRepositorio;
@@ -48,6 +49,7 @@ public class AddRegistry extends AppCompatActivity {
     private Registre reg;
     private ConstraintLayout coordinator;
 
+    private String hour;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +65,7 @@ public class AddRegistry extends AppCompatActivity {
         date = findViewById(R.id.date);
         dataAtual = new GregorianCalendar();
         formato = new SimpleDateFormat("dd/MM/yyyy");
+        hourFormat = new SimpleDateFormat("HH:mm");
         searchFood = findViewById(R.id.bt_search);
         foodName = findViewById(R.id.foodName);
         points = findViewById(R.id.points);
@@ -86,23 +89,31 @@ public class AddRegistry extends AppCompatActivity {
     private void loadRegistry(){
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.containsKey("REGISTRE")){
+            setTitle("Modificar registro");
             reg = (Registre) bundle.getSerializable("REGISTRE");
             foodName.setText(reg.DescriptionFood);
             points.setText(String.valueOf(reg.PointsUnity));
-            if(Calculator.verifyInteger(reg.AmountUnity)){
-                int q = (int) reg.AmountUnity;
-                unity.setText(String.valueOf("("+q) + " " + reg.UnityFood+")");
-            }
-            else unity.setText(String.valueOf(reg.AmountUnity) + reg.UnityFood);
-            quantity.setText(String.valueOf(reg.QuantityFood));
+            unity.setText("("+ Calculator.integerIfPossible(reg.AmountUnity) + " " + reg.UnityFood+")");
+            quantity.setText(Calculator.integerIfPossible(reg.QuantityFood));
             food = foodRepositorio.findFoodByName(reg.DescriptionFood);
             date.setText(reg.Day);
             cameFromList = true;
             return;
         }
-        if (bundle != null && bundle.containsKey("DATE")) {
-            String dateString = (String) bundle.getSerializable("DATE");
-            date.setText(dateString);
+        else if (bundle != null && bundle.containsKey("DATE")) {
+            String[] dateString = (String[]) bundle.getSerializable("DATE");
+            date.setText(dateString[0]);
+            hour = dateString[1];
+        }
+        else if (bundle != null && bundle.containsKey("NAMEFOOD")) {
+            String nameFood = (String) bundle.getSerializable("NAMEFOOD");
+            dataAtual = new GregorianCalendar();
+            formato = new SimpleDateFormat("dd/MM/yyyy");
+            hourFormat = new SimpleDateFormat("HH:mm");
+            date.setText(formato.format(dataAtual.getTime()));
+            hour = hourFormat.format(dataAtual.getTime());
+            foodName.setText(nameFood);
+            searchFood.performClick();
         }
     }
 
@@ -155,17 +166,20 @@ public class AddRegistry extends AppCompatActivity {
         else {
             foodName.setText(food.DescriptionFood);
             points.setText(String.valueOf(food.PointsUnity));
-            if(Calculator.verifyInteger(food.AmountUnity)){
-                int q = (int) food.AmountUnity;
-                unity.setText(String.valueOf("("+q) + " " + food.UnityFood+")");
-            }
-            else unity.setText(String.valueOf(food.AmountUnity) + food.UnityFood);
+            unity.setText(Calculator.integerIfPossible(food.AmountUnity) + " " + food.UnityFood);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        searchFood.performClick();
     }
 
     private void insert(){
         registre = new Registre();
         registre.Day = date.getText().toString();
+        registre.Hour = hour;
         registre.QuantityFood = Double.parseDouble(quantity.getText().toString());
         registre.FoodID = food.FoodID;
         if (!cameFromList){
