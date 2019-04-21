@@ -162,7 +162,7 @@ public class AddFood extends AppCompatActivity {
             cameFromList = true;
             return;
         }
-        if (bundle != null && bundle.containsKey("FOOD")){
+        if (bundle != null && bundle.containsKey("NAMEFOOD")){
             String name = (String) bundle.getSerializable("NAMEFOOD");
             foodName.setText(name);
             cameFromRegistre = true;
