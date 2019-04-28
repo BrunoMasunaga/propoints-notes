@@ -1,6 +1,5 @@
 package brunomasunaga.propointsnotes;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.PorterDuff;
@@ -261,7 +260,7 @@ public class ProPointsNotes extends AppCompatActivity {
     private boolean compareStartLimit(){
         formato.setCalendar(dataSelect);
         String select = formato.format(dataSelect.getTime());
-        if (select.equals("01/01/2019")) return true;
+        if (select.equals("28/04/2019")) return true;
         return false;
     }
 }

@@ -35,7 +35,7 @@
                 android:layout_marginEnd="8dp"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/nome_do_perfil"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -118,7 +118,7 @@
                 android:layout_marginEnd="8dp"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/altura_em_cm"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -149,7 +149,7 @@
                 android:layout_marginEnd="8dp"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/peso_em_kg"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -208,7 +208,7 @@
                 android:layout_marginEnd="8dp"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/idade"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -264,7 +264,7 @@
                 android:layout_marginEnd="8dp"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/g_nero"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -290,7 +290,7 @@
                     android:fontFamily="sans-serif-condensed"
                     android:text="@string/mulher"
                     android:textColorLink="@color/colorSecondary"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     tools:layout_editor_absoluteX="215dp"
                     tools:layout_editor_absoluteY="417dp" />
 
@@ -301,7 +301,7 @@
                     android:fontFamily="sans-serif-condensed"
                     android:text="@string/homem"
                     android:textColorLink="@color/colorSecondary"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     tools:layout_editor_absoluteX="119dp"
                     tools:layout_editor_absoluteY="417dp" />
             </RadioGroup>
@@ -337,7 +337,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/cota_di_ria_de_pontos"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -351,7 +351,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/n_o_calculada"
                 android:textColor="@color/colorAccent"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -380,7 +380,7 @@
         android:layout_marginBottom="16dp"
         android:fontFamily="sans-serif-condensed"
         android:text="@string/ltima_vez_salvo_nunca"
-        android:textSize="15sp"
+        android:textSize="14sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

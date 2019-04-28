@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import brunomasunaga.propointsnotes.ProPointsNotes;
 import brunomasunaga.propointsnotes.dominio.entidades.Registre;
 
 public class RegistreRepositorio {
@@ -91,22 +90,4 @@ public class RegistreRepositorio {
         return registres;
     }
 
-    public Registre findRegistre(int RegID){
-        StringBuilder sql = new StringBuilder();
-        sql.append("SELECT * FROM REGISTRES WHERE RegID = ?");
-        String[] parameters = new String[1];
-        parameters[0] = String.valueOf(RegID);
-        Cursor result = connection.rawQuery(sql.toString(), parameters);
-        if (result.getCount() > 0) {
-            result.moveToFirst();
-            Registre reg = new Registre();
-            reg.RegID = result.getInt(result.getColumnIndexOrThrow("RegID"));
-            reg.Day = result.getString(result.getColumnIndexOrThrow("Day"));
-            reg.Hour = result.getString(result.getColumnIndexOrThrow("Hour"));
-            reg.FoodID = result.getInt(result.getColumnIndexOrThrow("FoodID"));
-            reg.QuantityFood = result.getDouble(result.getColumnIndexOrThrow("QuantityFood"));
-            return reg;
-        }
-        return null;
-    }
 }

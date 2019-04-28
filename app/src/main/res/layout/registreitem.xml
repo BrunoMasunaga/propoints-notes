@@ -29,8 +29,9 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:text="Banana"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/quantidadeCons"
             app:layout_constraintStart_toEndOf="@+id/quantidadeCons"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -42,7 +43,7 @@
             android:fontFamily="sans-serif-condensed"
             android:text="00:00"
             android:textColor="@color/colorSecondary"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nomeComida" />
 
@@ -55,7 +56,7 @@
             android:layout_marginBottom="8dp"
             android:text="90"
             android:textColor="@color/colorAccent"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/hourCons"
             app:layout_constraintEnd_toEndOf="parent"

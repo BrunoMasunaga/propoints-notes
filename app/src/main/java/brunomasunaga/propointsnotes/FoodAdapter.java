@@ -1,7 +1,6 @@
 package brunomasunaga.propointsnotes;
 
-import android.app.Activity;
-import android.content.ComponentName;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,9 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 import brunomasunaga.propointsnotes.database.DatabaseOpenHelper;
@@ -35,9 +31,6 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolderFood
     private SQLiteDatabase connection;
     private DatabaseOpenHelper databaseOpenHelper;
     private Context ct;
-    private Calendar dataAtual;
-    private SimpleDateFormat formato;
-    private SimpleDateFormat formatoHour;
 
     public FoodAdapter(List<Food> foods, Context context){
         this.foods = foods;
@@ -100,10 +93,10 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolderFood
             pontos = itemView.findViewById(R.id.points);
             unity = itemView.findViewById(R.id.unity);
             info = itemView.findViewById(R.id.info);
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onLongClick(View v) {
-                    if(foods.size() == 0) return true;
+                public void onClick(View v) {
+                    if(foods.size() == 0) return;
                     createConnection(context);
                     foodRepositorio = new FoodRepositorio(connection);
                     Food food = foods.get(getLayoutPosition());
@@ -143,16 +136,16 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolderFood
                         ((AppCompatActivity) context).startActivityForResult(actAddFood, 0);
                         ((AppCompatActivity) context).finish();
                     }
-                    return true;
                 }
             });
-            itemView.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View v) {
+                public boolean onLongClick(View v) {
                     Food food = foods.get(getLayoutPosition());
                     Intent actAddRegistry = new Intent(context, AddRegistry.class);
                     actAddRegistry.putExtra("NAMEFOOD", food.DescriptionFood);
                     ((AppCompatActivity) context).startActivityForResult(actAddRegistry, 0);
+                    return true;
                 }
             });
         }

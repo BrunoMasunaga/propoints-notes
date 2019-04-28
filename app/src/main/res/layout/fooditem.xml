@@ -19,7 +19,7 @@
             android:layout_marginBottom="8dp"
             android:text="Carb: 0g | Prot: 0g | Gord: 0g | Fib: 0g"
             android:textColor="@android:color/background_dark"
-            android:textSize="15sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nomeComida" />
@@ -32,7 +32,7 @@
             android:fontFamily="sans-serif-condensed"
             android:text="BANANA"
             android:textColor="@color/colorAccent"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,7 +44,7 @@
             android:layout_marginStart="8dp"
             android:fontFamily="sans-serif-condensed"
             android:text="(1 item)"
-            android:textSize="18sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/nomeComida"
             app:layout_constraintStart_toEndOf="@+id/nomeComida"
             app:layout_constraintTop_toTopOf="@+id/nomeComida" />
@@ -58,7 +58,7 @@
             android:layout_marginBottom="8dp"
             android:text="90"
             android:textColor="@color/colorAccent"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

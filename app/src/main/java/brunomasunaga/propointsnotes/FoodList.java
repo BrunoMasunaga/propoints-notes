@@ -106,7 +106,7 @@ public class FoodList extends AppCompatActivity {
 
     private boolean uploadSuccess(){
         String sdcard = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String path = sdcard + File.separator + "foodList.txt";
+        String path = sdcard + File.separator + "propoints-bkFoodList.txt";
         list = new StringBuilder();
         try {
             BufferedReader buffer = new BufferedReader(new InputStreamReader(new FileInputStream(path), "utf8"), 8192);
@@ -158,16 +158,17 @@ public class FoodList extends AppCompatActivity {
         String[] foods = newList.split("\n");
         for (String line : foods){
             String[] data = line.split(",");
-            if (foodRepositorio.findFoodByName(data[0]) != null) continue;
+            if (foodRepositorio.findFoodByName(data[1]) != null) continue;
             Food newFood = new Food();
-            newFood.DescriptionFood = data[0];
-            newFood.UnityFood = data[1];
-            newFood.AmountUnity = Double.parseDouble(data[2]);
-            newFood.Carbs = Double.parseDouble(data[3]);
-            newFood.Prots = Double.parseDouble(data[4]);
-            newFood.Fats = Double.parseDouble(data[5]);
-            newFood.Fiber = Double.parseDouble(data[6]);
-            newFood.PointsUnity = Integer.parseInt(data[7]);
+            newFood.FoodID = Integer.parseInt(data[0]);
+            newFood.DescriptionFood = data[1];
+            newFood.UnityFood = data[2];
+            newFood.AmountUnity = Double.parseDouble(data[3]);
+            newFood.Carbs = Double.parseDouble(data[4]);
+            newFood.Prots = Double.parseDouble(data[5]);
+            newFood.Fats = Double.parseDouble(data[6]);
+            newFood.Fiber = Double.parseDouble(data[7]);
+            newFood.PointsUnity = Integer.parseInt(data[8]);
             if(newFood.PointsUnity == -1){
                 newFood.PointsUnity = Food.calculatePointsInfo(newFood.Carbs, newFood.Prots, newFood.Fats, newFood.Fiber, 1);
             }

@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import brunomasunaga.propointsnotes.database.DatabaseOpenHelper;
 import brunomasunaga.propointsnotes.dominio.entidades.Food;
